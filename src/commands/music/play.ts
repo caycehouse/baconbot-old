@@ -1,7 +1,12 @@
-const { Command } = require('discord.js-commando')
+import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
+import Discord from 'discord.js'
 
-module.exports = class PlayCommand extends Command {
-  constructor(client: any) {
+interface BaconClient extends CommandoClient {
+  [player: string]: any
+}
+
+export default class PlayCommand extends Command {
+  constructor (client: CommandoClient) {
     super(client, {
       name: 'play',
       group: 'music',
@@ -17,22 +22,38 @@ module.exports = class PlayCommand extends Command {
     })
   }
 
-  async run(message: { error: (arg0: string) => any; member: { voice: { channel: any; }; }; }, { song }: any) {
-    if (!song) {
-      return message.error("music/play:MISSING_SONG_NAME");
+  async run (message: CommandoMessage, { song }: { song: string }): Promise<null | CommandoMessage | CommandoMessage[]> {
+    if (song === null) {
+      const embed = new Discord.MessageEmbed()
+        .setAuthor('Missing Song Name')
+
+      return await message.say(embed)
     }
 
-    const voice = message.member.voice.channel;
-    if (!voice) {
-      return message.error("music/play:NO_VOICE_CHANNEL");
+    const voice = message.member?.voice.channel
+    if (voice === null) {
+      const embed = new Discord.MessageEmbed()
+        .setAuthor('No Voice Channel')
+
+      return await message.say(embed)
+    }
+
+    if (this.client.user === null) {
+      const embed = new Discord.MessageEmbed()
+        .setAuthor('No Client User')
+
+      return await message.say(embed)
     }
 
     // Check my permissions
-    const perms = voice.permissionsFor(this.client.user);
-    if (!perms.has("CONNECT") || !perms.has("SPEAK")) {
-      return message.error("music/play:VOICE_CHANNEL_CONNECT");
+    const perms = voice?.permissionsFor(this.client.user)
+    if (perms?.has('CONNECT') === false || perms?.has('SPEAK') === false) {
+      const embed = new Discord.MessageEmbed()
+        .setAuthor('Unable to join a voice channel')
+
+      return await message.say(embed)
     }
 
-    await this.client.player.play(message, song);
+    return (this.client as BaconClient).player.play(message, song)
   }
 }
