@@ -1,4 +1,6 @@
 {
-	"prefix": "!",
-	"token": "your-token-goes-here"
+  "owner": "your-id-goes-here",
+  "prefix": "!",
+  "supportServerInvite": "your-server-invite-goes-here",
+  "token": "your-token-goes-here"
 }
