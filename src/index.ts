@@ -1,10 +1,11 @@
 import { Client, CommandoClient } from 'discord.js-commando'
+import { Message } from 'discord.js'
 import path from 'path'
-import { Player } from 'discord-player'
+import { Player, Track } from 'discord-player'
 import config from './config'
 
 interface BaconClient extends CommandoClient {
-  [player: string]: any
+  player?: Player
 }
 
 const client: BaconClient = new Client({
@@ -13,7 +14,6 @@ const client: BaconClient = new Client({
   invite: config.supportServerInvite
 })
 
-// Create a new Player (you don't need any API Key)
 const player = new Player(client, {
   ytdlDownloadOptions: {
     filter: 'audioonly'
@@ -24,7 +24,11 @@ const player = new Player(client, {
 client.player = player
 
 // add the trackStart event so when a song will be played this message will be sent
-client.player.on('trackStart', (message: { channel: { send: (arg0: string) => any } }, track: { title: string }) => message.channel.send(`Now playing ${track.title}...`))
+client.player.on('trackStart', (message: Message, track: Track) => {
+  message.channel.send(`Now playing ${track.title}...`).catch(() => {
+    console.log('An error occured while sending now playing track message.')
+  })
+})
 
 client.registry
   .registerDefaultTypes()

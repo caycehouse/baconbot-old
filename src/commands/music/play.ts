@@ -1,8 +1,9 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
-import Discord from 'discord.js'
+import Discord, { ClientUser } from 'discord.js'
+import { Player } from 'discord-player'
 
 interface BaconClient extends CommandoClient {
-  [player: string]: any
+  player: Player
 }
 
 export default class PlayCommand extends Command {
@@ -38,15 +39,8 @@ export default class PlayCommand extends Command {
       return await message.say(embed)
     }
 
-    if (this.client.user === null) {
-      const embed = new Discord.MessageEmbed()
-        .setAuthor('No Client User')
-
-      return await message.say(embed)
-    }
-
     // Check my permissions
-    const perms = voice?.permissionsFor(this.client.user)
+    const perms = voice?.permissionsFor((this.client.user as ClientUser))
     if (perms?.has('CONNECT') === false || perms?.has('SPEAK') === false) {
       const embed = new Discord.MessageEmbed()
         .setAuthor('Unable to join a voice channel')
@@ -54,6 +48,8 @@ export default class PlayCommand extends Command {
       return await message.say(embed)
     }
 
-    return (this.client as BaconClient).player.play(message, song)
+    await (this.client as BaconClient).player.play(message, song)
+
+    return null
   }
 }
