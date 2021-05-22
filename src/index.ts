@@ -16,7 +16,13 @@ const client: BaconClient = new Client({
 
 const player = new Player(client, {
   ytdlDownloadOptions: {
-    filter: 'audioonly'
+    filter: 'audioonly',
+    quality: 'highestaudio',
+    requestOptions: {
+      headers: {
+        cookie: config.youtubeCookie
+      }
+    }
   }
 })
 

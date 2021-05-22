@@ -48,8 +48,11 @@ export default class PlayCommand extends Command {
       return await message.say(embed)
     }
 
-    await (this.client as BaconClient).player.play(message, song, true).catch(() => {
-      console.log('Error while trying to play song.')
+    await (this.client as BaconClient).player.play(message, song, true).catch(async () => {
+      const embed = new Discord.MessageEmbed()
+        .setAuthor('An error occured while trying to play this song.')
+
+      return await message.say(embed)
     })
 
     return null
