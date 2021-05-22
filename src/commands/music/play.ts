@@ -48,7 +48,9 @@ export default class PlayCommand extends Command {
       return await message.say(embed)
     }
 
-    await (this.client as BaconClient).player.play(message, song)
+    await (this.client as BaconClient).player.play(message, song, true).catch(() => {
+      console.log('Error while trying to play song.')
+    })
 
     return null
   }
