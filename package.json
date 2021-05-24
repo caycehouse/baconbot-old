@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/caycehouse/baconbot#readme",
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.1",
-    "@types/node": "^15.3.1",
+    "@tsconfig/node14": "^1.0.0",
+    "@types/node": "^15.6.0",
     "ts-standard": "^10.0.0"
   },
   "dependencies": {
@@ -29,7 +29,6 @@
     "bufferutil": "^4.0.3",
     "discord-player": "^4.1.0",
     "discord.js": "^12.5.3",
-    "discord.js-commando": "^0.12.3",
     "erlpack": "github:discord/erlpack",
     "ffmpeg-static": "^4.3.0",
     "libsodium-wrappers": "^0.7.9",

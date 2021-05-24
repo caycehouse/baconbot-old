@@ -1,58 +1,45 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando'
-import Discord, { ClientUser } from 'discord.js'
+import { Client, ClientUser, Message, MessageEmbed } from 'discord.js'
 import { Player } from 'discord-player'
 
-interface BaconClient extends CommandoClient {
+interface BaconClient extends Client {
   player: Player
 }
 
-export default class PlayCommand extends Command {
-  constructor (client: CommandoClient) {
-    super(client, {
-      name: 'play',
-      group: 'music',
-      memberName: 'play',
-      description: 'Plays the specified song either by search or URL.',
-      args: [
-        {
-          key: 'song',
-          prompt: 'What song would you like the bot to play?',
-          type: 'string'
-        }
-      ]
-    })
-  }
-
-  async run (message: CommandoMessage, { song }: { song: string }): Promise<null | CommandoMessage | CommandoMessage[]> {
+module.exports = {
+  name: 'play',
+  description: 'Plays the specified song',
+  args: true,
+  async execute (message: Message, args: string[]) {
+    const song = args.join(' ')
     if (song === null) {
-      const embed = new Discord.MessageEmbed()
+      const embed = new MessageEmbed()
         .setAuthor('Missing Song Name')
 
-      return await message.say(embed)
+      return await message.channel.send(embed)
     }
 
     const voice = message.member?.voice.channel
     if (voice === null) {
-      const embed = new Discord.MessageEmbed()
+      const embed = new MessageEmbed()
         .setAuthor('No Voice Channel')
 
-      return await message.say(embed)
+      return await message.channel.send(embed)
     }
 
     // Check my permissions
-    const perms = voice?.permissionsFor((this.client.user as ClientUser))
+    const perms = voice?.permissionsFor((message.client.user as ClientUser))
     if (perms?.has('CONNECT') === false || perms?.has('SPEAK') === false) {
-      const embed = new Discord.MessageEmbed()
+      const embed = new MessageEmbed()
         .setAuthor('Unable to join a voice channel')
 
-      return await message.say(embed)
+      return await message.channel.send(embed)
     }
 
-    await (this.client as BaconClient).player.play(message, song, true).catch(async () => {
-      const embed = new Discord.MessageEmbed()
+    await (message.client as BaconClient).player.play(message, song, true).catch(async () => {
+      const embed = new MessageEmbed()
         .setAuthor('An error occured while trying to play this song.')
 
-      return await message.say(embed)
+      return await message.channel.send(embed)
     })
 
     return null
