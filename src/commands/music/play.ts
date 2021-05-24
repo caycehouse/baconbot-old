@@ -1,7 +1,7 @@
 import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js'
 import ytdl from 'ytdl-core-discord'
 
-const Play = {
+export const Play = {
   name: 'play',
   description: 'Plays the specified song',
   options: [{
@@ -35,5 +35,3 @@ const Play = {
     }
   }
 }
-
-export default Play

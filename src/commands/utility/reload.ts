@@ -6,7 +6,7 @@ interface BaconClient extends Client {
   commands: Collection<String, any>
 }
 
-const Reload = {
+export const Reload = {
   name: 'reload',
   description: 'Reloads a command',
   options: [{
@@ -40,5 +40,3 @@ const Reload = {
     }
   }
 }
-
-export default Reload

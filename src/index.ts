@@ -1,7 +1,6 @@
 import Discord, { Collection, Intents } from 'discord.js'
-import { resolve } from 'path'
 import config from './config'
-import { readdirSync } from 'fs'
+import * as commands from './commands'
 
 interface BaconClient extends Discord.Client {
   commands?: Discord.Collection<String, any>
@@ -13,15 +12,9 @@ async function loadCommands() {
   if (!client.commands) client.commands = new Collection();
 
   try {
-    const commandFolders = readdirSync(resolve(__dirname, './commands'))
-
-    for (const folder of commandFolders) {
-      const commandFiles = readdirSync(resolve(__dirname, './commands/', folder)).filter((file: string) => file.endsWith('.js'))
-      for (const file of commandFiles) {
-        const command = require(resolve(__dirname, './commands', folder, file)).default;
-
-        client.commands?.set(command.name, command);
-      }
+    const keys = Object.keys(commands)
+    for (const key of keys) {
+      client.commands?.set((commands as { [key: string]: any })[key].name, (commands as { [key: string]: any })[key]);
     }
 
     console.info(`${client.commands?.array().length} commands loaded`);
@@ -39,10 +32,10 @@ async function loadCommands() {
 }
 
 client.on('interaction', async interaction => {
-	if (!interaction.isCommand()) return;
+  if (!interaction.isCommand()) return;
 
   const command = (interaction.client as BaconClient).commands?.get(interaction.commandName) ||
-  (interaction.client as BaconClient).commands?.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.commandName))
+    (interaction.client as BaconClient).commands?.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.commandName))
 
   try {
     command.execute(interaction)
