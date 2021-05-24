@@ -26,14 +26,9 @@
   },
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
-    "bufferutil": "^4.0.3",
     "discord-player": "^4.1.0",
-    "discord.js": "^12.5.3",
-    "erlpack": "github:discord/erlpack",
+    "discord.js": "github:discordjs/discord.js#b376f31",
     "ffmpeg-static": "^4.3.0",
-    "libsodium-wrappers": "^0.7.9",
-    "typescript": "^4.2.4",
-    "utf-8-validate": "^5.0.5",
-    "zlib-sync": "^0.1.7"
+    "typescript": "^4.2.4"
   }
 }

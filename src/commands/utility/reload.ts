@@ -6,7 +6,7 @@ interface BaconClient extends Client {
   commands: Collection<String, any>
 }
 
-module.exports = {
+const Reload = {
   name: 'reload',
   description: 'Reloads a command',
   args: true,
@@ -35,3 +35,5 @@ module.exports = {
     }
   }
 }
+
+export default Reload

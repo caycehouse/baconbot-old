@@ -5,7 +5,7 @@ interface BaconClient extends Client {
   player: Player
 }
 
-module.exports = {
+const Skip = {
   name: 'skip',
   description: 'Skips the current song',
   async execute (message: Message) {
@@ -86,3 +86,5 @@ module.exports = {
     return null
   }
 }
+
+export default Skip
