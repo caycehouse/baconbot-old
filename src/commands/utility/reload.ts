@@ -1,4 +1,4 @@
-import { Client, Collection, Message } from 'discord.js'
+import { Client, Collection, CommandInteraction } from 'discord.js'
 import path from 'path'
 import fs from 'fs'
 
@@ -9,14 +9,19 @@ interface BaconClient extends Client {
 const Reload = {
   name: 'reload',
   description: 'Reloads a command',
-  args: true,
-  execute (message: Message, args: string[]) {
-    const commandName = args[0].toLowerCase()
-    const command = (message.client as BaconClient).commands.get(commandName) ||
-            (message.client as BaconClient).commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))
+  options: [{
+    name: 'command',
+    type: 'STRING',
+    description: 'The command to reload',
+    required: true,
+  }],
+  execute (interaction: CommandInteraction) {
+    const commandName = String(interaction.options[0].value)
+    const command = (interaction.client as BaconClient).commands.get(commandName) ||
+            (interaction.client as BaconClient).commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))
 
     if (!command) {
-      return message.channel.send(`There is no command with name or alias \`${commandName}\`, ${message.author}!`)
+      return interaction.reply(`There is no command with name or alias \`${commandName}\`.`, { ephemeral: true })
     }
 
     const commandFolders = fs.readdirSync(path.resolve(__dirname, '..'))
@@ -25,13 +30,13 @@ const Reload = {
     delete require.cache[require.resolve(`../${folderName}/${command.name}.js`)]
 
     try {
-      var newCommand: any
-      newCommand = require(`../${folderName}/${command.name}.js`);
-      (message.client as BaconClient).commands.set(newCommand.name, newCommand)
-      message.channel.send(`Command \`${newCommand.name}\` was reloaded!`)
+      const newCommand = require(`../${folderName}/${command.name}.js`).default;
+
+      (interaction.client as BaconClient).commands.set(newCommand.name, newCommand)
+      return interaction.reply(`Command \`${newCommand.name}\` was reloaded!`, { ephemeral: true })
     } catch (error) {
       console.error(error)
-      message.channel.send(`There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\``)
+      return interaction.reply(`There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\``, { ephemeral: true })
     }
   }
 }

@@ -1,38 +1,13 @@
 import Discord, { Collection, Intents } from 'discord.js'
-import { Player, Track } from 'discord-player'
 import { resolve } from 'path'
 import config from './config'
 import { readdirSync } from 'fs'
-import Play from './commands/music/play'
 
 interface BaconClient extends Discord.Client {
-  player?: Player
   commands?: Discord.Collection<String, any>
 }
 
-const client: BaconClient = new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] })
-
-const player = new Player(client, {
-  ytdlDownloadOptions: {
-    filter: 'audioonly',
-    quality: 'highestaudio',
-    requestOptions: {
-      headers: {
-        cookie: config.youtubeCookie
-      }
-    }
-  }
-})
-
-// To easily access the player
-client.player = player
-
-// add the trackStart event so when a song will be played this message will be sent
-client.player.on('trackStart', (message: Discord.Message, track: Track) => {
-  message.channel.send(`Now playing ${track.title}...`).catch(() => {
-    console.log('An error occured while sending now playing track message.')
-  })
-})
+const client: BaconClient = new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] })
 
 async function loadCommands() {
   if (!client.commands) client.commands = new Collection();
@@ -51,7 +26,7 @@ async function loadCommands() {
 
     console.info(`${client.commands?.array().length} commands loaded`);
   } catch (error) {
-    console.error(`bot#loadCommands >> ${error.stack}`);
+    console.error(`index#loadCommands >> ${error.stack}`);
   }
 
   const remote = client.guilds.cache.get('727984268793479301')
@@ -65,8 +40,15 @@ async function loadCommands() {
 
 client.on('interaction', async interaction => {
 	if (!interaction.isCommand()) return;
-	if (interaction.commandName === 'play') {
-    Play.execute(interaction)
+
+  const command = (interaction.client as BaconClient).commands?.get(interaction.commandName) ||
+  (interaction.client as BaconClient).commands?.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.commandName))
+
+  try {
+    command.execute(interaction)
+  } catch (error) {
+    console.error(error)
+    interaction.reply('there was an error trying to execute that command!', { ephemeral: true })
   }
 });
 

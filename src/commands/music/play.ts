@@ -1,9 +1,5 @@
-import { Client, ClientUser, Message, MessageEmbed } from 'discord.js'
-import { Player } from 'discord-player'
-
-interface BaconClient extends Client {
-  player: Player
-}
+import { ClientUser, CommandInteraction, MessageEmbed } from 'discord.js'
+import ytdl from 'ytdl-core-discord'
 
 const Play = {
   name: 'play',
@@ -14,43 +10,29 @@ const Play = {
     description: 'The song or URL to play from',
     required: true,
   }],
-  async execute (interaction: any) {
-    console.log(interaction.options)
-    const song = interaction.options['value']
-    if (song === null) {
-      const embed = new MessageEmbed()
-        .setAuthor('Missing Song Name')
-
-      return await interaction.channel.send(embed)
-    }
+  async execute(interaction: CommandInteraction) {
+    const song = String(interaction.options[0].value)
 
     const voice = interaction.member?.voice.channel
     if (voice === null) {
-      const embed = new MessageEmbed()
-        .setAuthor('No Voice Channel')
-
-      return await interaction.channel.send(embed)
+      return interaction.reply('Please enter a voice channel first!')
     }
 
-    // Check my permissions
     const perms = voice?.permissionsFor((interaction.client.user as ClientUser))
     if (perms?.has('CONNECT') === false || perms?.has('SPEAK') === false) {
-      const embed = new MessageEmbed()
-        .setAuthor('Unable to join a voice channel')
-
-      return await interaction.channel.send(embed)
+      return interaction.reply('Unable to join the voice channel.')
     }
 
-    await (interaction.client as BaconClient).player.play(interaction, song, true).catch(async (e) => {
-      const embed = new MessageEmbed()
-        .setAuthor('An error occured while trying to play this song.')
+    try {
+      const connection = await voice.join()
 
-        console.log(e)
-
-      return await interaction.channel.send(embed)
-    })
-
-    return null
+      await connection.play(await ytdl(song, { filter: 'audioonly' }), { type: 'opus' })
+  
+      return interaction.reply(`Now Playing ${song}`)
+    } catch (error) {
+      console.error(`Play#execute >> ${error.stack}`);
+      return interaction.reply('An unexpected error has occured.')
+    }
   }
 }
 
