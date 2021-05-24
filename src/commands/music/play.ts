@@ -42,7 +42,7 @@ export const Play = {
     try {
       voice.join().then(async (connection: VoiceConnection) => {
 
-        let stream = await ytdl(songURL, { filter: 'audioonly' })
+        let stream = await ytdl(songURL, { filter: 'audioonly', quality: 'highestaudio' })
 
         let dispatcher = connection.play(stream, { type: 'opus' })
 
