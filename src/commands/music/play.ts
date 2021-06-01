@@ -1,6 +1,21 @@
-import { ClientUser, CommandInteraction, VoiceConnection } from 'discord.js'
+import { ClientUser, VoiceConnection } from 'discord.js'
 import ytdl from 'ytdl-core-discord'
 import ytsr, { Video } from 'ytsr'
+import { Bot } from '../../bot'
+import { BaconCommandInteraction } from '../../index.d'
+
+async function playSong(connection: VoiceConnection, client: Bot, songURL: string) {
+  const dispatcher = connection.play(await ytdl(songURL, { filter: 'audioonly', quality: 'highestaudio' }), { type: 'opus' })
+
+  client.dispatcher = dispatcher
+
+  dispatcher.on('finish', () => {
+    const nextTrack = client.getQueue()
+    if(nextTrack) {
+      playSong(connection, client, nextTrack)
+    }
+  })
+}
 
 export const Play = {
   name: 'play',
@@ -11,7 +26,7 @@ export const Play = {
     description: 'The song or URL to play from',
     required: true
   }],
-  async execute (interaction: CommandInteraction) {
+  async execute (interaction: BaconCommandInteraction) {
     const song = String(interaction.options[0].value)
 
     const voice = interaction.member?.voice.channel
@@ -41,15 +56,19 @@ export const Play = {
 
     try {
       voice.join().then(async (connection: VoiceConnection) => {
-        const dispatcher = connection.play(await ytdl(songURL, { filter: 'audioonly', quality: 'highestaudio' }), { type: 'opus' })
-
-        dispatcher.on('end', () => voice.leave())
+        const length = interaction.client.addQueue(songURL)
+        if(!interaction.client.dispatcher) {
+          const nextTrack = interaction.client.getQueue()
+          if (nextTrack) {
+            playSong(connection, interaction.client, nextTrack)
+            return await interaction.editReply(`Now Playing ${songURL}`)
+          }
+        }
+        return await interaction.editReply(`Queued ${songURL}`)
       }).catch(async (error: { stack: string }) => {
         console.error(`Play#execute#2 >> ${error.stack}`)
         return await interaction.editReply('An unexpected error has occured.')
       })
-
-      return await interaction.editReply(`Now Playing ${songURL}`)
     } catch (error) {
       console.error(`Play#execute#3 >> ${(error.stack as string)}`)
       return await interaction.editReply('An unexpected error has occured.')

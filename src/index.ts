@@ -1,12 +1,13 @@
-import Discord, { Collection, Intents } from 'discord.js'
+import { Collection, Intents } from 'discord.js'
 import config from './config'
 import * as commands from './commands'
+import { Bot } from './bot'
 
-interface BaconClient extends Discord.Client {
-  commands?: Discord.Collection<String, any>
-}
-
-const client: BaconClient = new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] })
+const client = new Bot({
+  intents: [Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_VOICE_STATES]
+})
 
 async function loadCommands (): Promise<void> {
   if (client.commands == null) client.commands = new Collection()
@@ -22,7 +23,7 @@ async function loadCommands (): Promise<void> {
     console.error(`index#loadCommands >> ${(error.stack as string)}`)
   }
 
-  const remote = client.guilds.cache.get('727984268793479301')
+  const remote = client.guilds.cache.get(config.guild)
 
   await remote?.commands.set(client.commands.array())
 
@@ -38,8 +39,8 @@ client.on('interaction', interaction => {
     console.error(`An error occured while deferring interaction. >> ${(error.stack as string)}`)
   })
 
-  const command = (interaction.client as BaconClient).commands?.get(interaction.commandName) ||
-    (interaction.client as BaconClient).commands?.find(cmd => cmd.aliases.includes(interaction.commandName))
+  const command = client.commands?.get(interaction.commandName) ||
+    client.commands?.find(cmd => cmd.aliases.includes(interaction.commandName))
 
   try {
     command.execute(interaction)
