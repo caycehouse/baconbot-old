@@ -13,6 +13,9 @@ async function playSong(connection: VoiceConnection, client: Bot, songURL: strin
     const nextTrack = client.getQueue()
     if(nextTrack) {
       playSong(connection, client, nextTrack)
+    } else {
+      connection.channel.leave()
+      client.dispatcher = null
     }
   })
 }
