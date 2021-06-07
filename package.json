@@ -22,7 +22,7 @@
   "homepage": "https://github.com/caycehouse/baconbot#readme",
   "devDependencies": {
     "@tsconfig/node14": "^1.0.0",
-    "@types/node": "^15.6.1",
+    "@types/node": "^15.12.1",
     "ts-node-dev": "^1.1.6",
     "ts-standard": "^10.0.0"
   },
