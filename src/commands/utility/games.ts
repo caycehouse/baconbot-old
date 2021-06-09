@@ -33,11 +33,12 @@ export const Games = {
     ]
   }],
   async execute(interaction: CommandInteraction) {
-    const service = interaction.options[0]
-    const action = String(interaction.options[1].value)
+    
+    const service = String(interaction.options.get('service')?.value)
+    const action = String(interaction.options.get('action')?.value)
 
     var functionName;
-    if (String(service.value) == "minecraft") {
+    if (service == "minecraft") {
       functionName = config.awsMCFunctionName;
     }
 
@@ -56,7 +57,7 @@ export const Games = {
           interaction.editReply('An error has occured.');
         } else {
           console.log(data);
-          interaction.editReply(`${service.name} is now ${action}.`);
+          interaction.editReply(`${service} is now ${action}.`);
         }
       });
     }

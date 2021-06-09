@@ -3,8 +3,8 @@ import { BaconCommandInteraction } from '../../index.d'
 export const Skip = {
   name: 'skip',
   description: 'Skips the current song',
-  async execute(interaction: BaconCommandInteraction) {
-    if (interaction.client.dispatcher) {
+  async execute (interaction: BaconCommandInteraction) {
+    if (interaction.client.dispatcher != null) {
       interaction.client.dispatcher.end()
       return await interaction.editReply('Skipping the current track')
     } else {

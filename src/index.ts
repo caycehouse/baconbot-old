@@ -23,7 +23,7 @@ async function loadCommands (): Promise<void> {
     console.error(`index#loadCommands >> ${(error.stack as string)}`)
   }
 
-  const remote = client.guilds.cache.get(config.guild)
+  const remote = client.guilds.cache.get(BigInt(config.guild));
 
   await remote?.commands.set(client.commands.array())
 
@@ -35,7 +35,7 @@ async function loadCommands (): Promise<void> {
 client.on('interaction', interaction => {
   if (!interaction.isCommand()) return
 
-  interaction.defer(false).catch((error) => {
+  interaction.defer().catch((error) => {
     console.error(`An error occured while deferring interaction. >> ${(error.stack as string)}`)
   })
 

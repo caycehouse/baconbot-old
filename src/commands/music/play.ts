@@ -1,17 +1,17 @@
-import { ClientUser, VoiceConnection } from 'discord.js'
+import { ClientUser, GuildMember, VoiceConnection } from 'discord.js'
 import ytdl from 'ytdl-core-discord'
 import ytsr, { Video } from 'ytsr'
 import { Bot } from '../../bot'
 import { BaconCommandInteraction } from '../../index.d'
 
-async function playSong(connection: VoiceConnection, client: Bot, songURL: string) {
+async function playSong (connection: VoiceConnection, client: Bot, songURL: string) {
   const dispatcher = connection.play(await ytdl(songURL, { filter: 'audioonly', quality: 'highestaudio' }), { type: 'opus' })
 
   client.dispatcher = dispatcher
 
   dispatcher.on('finish', () => {
     const nextTrack = client.getQueue()
-    if(nextTrack) {
+    if (nextTrack) {
       playSong(connection, client, nextTrack)
     } else {
       connection.channel.leave()
@@ -30,9 +30,10 @@ export const Play = {
     required: true
   }],
   async execute (interaction: BaconCommandInteraction) {
-    const song = String(interaction.options[0].value)
+    const song = String(interaction.options.get('song')?.value)
 
-    const voice = interaction.member?.voice.channel
+    const voice = (interaction.member as GuildMember).voice.channel;
+
     if (voice === null) {
       return await interaction.editReply('Please enter a voice channel first!')
     }
@@ -60,7 +61,7 @@ export const Play = {
     try {
       voice.join().then(async (connection: VoiceConnection) => {
         const length = interaction.client.addQueue(songURL)
-        if(!interaction.client.dispatcher) {
+        if (interaction.client.dispatcher == null) {
           const nextTrack = interaction.client.getQueue()
           if (nextTrack) {
             playSong(connection, interaction.client, nextTrack)
