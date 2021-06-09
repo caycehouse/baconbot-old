@@ -23,7 +23,8 @@ async function loadCommands (): Promise<void> {
     console.error(`index#loadCommands >> ${(error.stack as string)}`)
   }
 
-  const remote = client.guilds.cache.get(BigInt(config.guild));
+  // @ts-ignore
+  const remote = client.guilds.cache.get(config.guild);
 
   await remote?.commands.set(client.commands.array())
 
