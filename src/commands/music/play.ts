@@ -32,7 +32,7 @@ export const Play = {
   async execute (interaction: BaconCommandInteraction) {
     const song = String(interaction.options.get('song')?.value)
 
-    const voice = (interaction.member as GuildMember).voice.channel;
+    const voice = (interaction.member as GuildMember).voice.channel
 
     if (voice === null) {
       return await interaction.editReply('Please enter a voice channel first!')

@@ -1,3 +1,9 @@
 export default {
-    token: "your-token-goes-here"
+    awsAccessKeyId: "",
+    awsMCFunctionName: "",
+    awsRegion: "",
+    awsSecretAccessKey: "",
+    guild: "",
+    minecraftIP: "",
+    token: ""
 };

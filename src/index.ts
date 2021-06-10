@@ -2,6 +2,8 @@ import { Collection, Intents } from 'discord.js'
 import config from './config'
 import * as commands from './commands'
 import { Bot } from './bot'
+import axios from 'axios'
+import { Credentials, Lambda } from 'aws-sdk'
 
 const client = new Bot({
   intents: [Intents.FLAGS.GUILDS,
@@ -23,8 +25,8 @@ async function loadCommands (): Promise<void> {
     console.error(`index#loadCommands >> ${(error.stack as string)}`)
   }
 
-  // @ts-ignore
-  const remote = client.guilds.cache.get(config.guild);
+  // @ts-expect-error
+  const remote = client.guilds.cache.get(config.guild)
 
   await remote?.commands.set(client.commands.array())
 
@@ -64,3 +66,28 @@ client.once('ready', () => {
 client.login(config.token).catch((error) => {
   console.error(`An error occured while logging in. >> ${(error.stack as string)}`)
 })
+
+const timeInMinutes = 30
+setInterval(() => {
+  axios.get(`https://mcapi.us/server/status?ip=${config.minecraftIP}`).then(function (response) {
+    if (response.data.players.now === 0) {
+      const credentials = new Credentials(config.awsAccessKeyId, config.awsSecretAccessKey)
+
+      const lambda = new Lambda({ region: config.awsRegion, credentials })
+
+      var params = {
+        FunctionName: config.awsMCFunctionName,
+        Payload: '{ "status": "Stopped" }'
+      }
+      lambda.invoke(params, function (err, data) {
+        if (err) {
+          console.log(err, err.stack)
+        } else {
+          console.log(data)
+        }
+      })
+    }
+  }).catch(function (error) {
+    console.log(error)
+  })
+}, timeInMinutes * 60 * 1000)
