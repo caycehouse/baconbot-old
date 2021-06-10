@@ -70,7 +70,7 @@ client.login(config.token).catch((error) => {
 const timeInMinutes = 30
 setInterval(() => {
   axios.get(`https://mcapi.us/server/status?ip=${config.minecraftIP}`).then(function (response) {
-    if (response.data.players.now === 0) {
+    if (response.data.online === true && response.data.players.now === 0) {
       const credentials = new Credentials(config.awsAccessKeyId, config.awsSecretAccessKey)
 
       const lambda = new Lambda({ region: config.awsRegion, credentials })
