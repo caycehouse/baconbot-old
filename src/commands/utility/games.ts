@@ -13,32 +13,16 @@ export const Games = {
     "choices": [
       {
         "name": "Minecraft 1.17",
-        "value": "minecraft"
-      }
-    ]
-  }, {
-    name: 'action',
-    type: 'STRING',
-    description: 'The action to take',
-    required: true,
-    "choices": [
-      {
-        "name": "Start",
-        "value": "Running"
-      },
-      {
-        "name": "Stop",
-        "value": "Stopped"
+        "value": "Minecraft"
       }
     ]
   }],
   async execute(interaction: CommandInteraction) {
     
     const service = String(interaction.options.get('service')?.value)
-    const action = String(interaction.options.get('action')?.value)
 
     var functionName;
-    if (service == "minecraft") {
+    if (service == "Minecraft") {
       functionName = config.awsMCFunctionName;
     }
 
@@ -49,7 +33,7 @@ export const Games = {
 
       var params = {
         FunctionName: functionName,
-        Payload: `{ "status": "${action}" }`
+        Payload: `{ "status": "Running" }`
       };
       lambda.invoke(params, function (err, data) {
         if (err) {
@@ -57,7 +41,7 @@ export const Games = {
           interaction.editReply('An error has occured.');
         } else {
           console.log(data);
-          interaction.editReply(`${service} is now ${action}.`);
+          interaction.editReply(`${service} is now Running.`);
         }
       });
     }
