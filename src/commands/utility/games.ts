@@ -32,7 +32,7 @@ export const Games = {
 
       var params = {
         FunctionName: functionName,
-        Payload: '{ "status": "Running" }'
+        Payload: '{ "status": "Start" }'
       }
       lambda.invoke(params, function (err, data) {
         if (err) {

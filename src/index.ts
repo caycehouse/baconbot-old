@@ -67,17 +67,17 @@ client.login(config.token).catch((error) => {
   console.error(`An error occured while logging in. >> ${(error.stack as string)}`)
 })
 
-const timeInMinutes = 30
+var previousCount = 0;
 setInterval(() => {
   axios.get(`https://mcapi.us/server/status?ip=${config.minecraftIP}`).then(function (response) {
-    if (response.data.online === true && response.data.players.now === 0) {
+    if (response.data.online === true && response.data.players.now === 0 && previousCount === 0) {
       const credentials = new Credentials(config.awsAccessKeyId, config.awsSecretAccessKey)
 
       const lambda = new Lambda({ region: config.awsRegion, credentials })
 
       var params = {
         FunctionName: config.awsMCFunctionName,
-        Payload: '{ "status": "Stopped" }'
+        Payload: '{ "status": "Stop" }'
       }
       lambda.invoke(params, function (err, data) {
         if (err) {
@@ -87,7 +87,8 @@ setInterval(() => {
         }
       })
     }
+    previousCount = response.data.players.now;
   }).catch(function (error) {
     console.log(error)
   })
-}, timeInMinutes * 60 * 1000)
+}, 900000);
