@@ -67,7 +67,7 @@ client.login(config.token).catch((error) => {
   console.error(`An error occured while logging in. >> ${(error.stack as string)}`)
 })
 
-var previousCount = 0;
+var previousCount = 1;
 setInterval(() => {
   axios.get(`https://mcapi.us/server/status?ip=${config.minecraftIP}`).then(function (response) {
     if (response.data.online === true && response.data.players.now === 0 && previousCount === 0) {
@@ -86,8 +86,11 @@ setInterval(() => {
           console.log(data)
         }
       })
+    } else if(response.data.online === false) {
+      previousCount = 1;
+    } else {
+      previousCount = response.data.players.now;
     }
-    previousCount = response.data.players.now;
   }).catch(function (error) {
     console.log(error)
   })
