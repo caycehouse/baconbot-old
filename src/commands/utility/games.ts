@@ -1,4 +1,5 @@
 import { Credentials, Lambda } from 'aws-sdk'
+import axios from 'axios'
 import { CommandInteraction } from 'discord.js'
 import config from '../../config'
 
@@ -17,12 +18,19 @@ export const Games = {
       }
     ]
   }],
-  async execute (interaction: CommandInteraction) {
+  async execute(interaction: CommandInteraction) {
     const service = String(interaction.options.get('service')?.value)
 
     var functionName
     if (service == 'Minecraft') {
-      functionName = config.awsMCFunctionName
+      axios.get(`https://mcapi.us/server/status?ip=${config.minecraftIP}`).then(function (response) {
+        if (response.data.online === true) {
+          return interaction.editReply(`${service} is already Running.`);
+        }
+      }).catch(function (err) {
+        console.log(err, err.stack)
+      });
+      functionName = config.awsMCFunctionName;
     }
 
     if (functionName) {
