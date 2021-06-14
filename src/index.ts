@@ -69,8 +69,8 @@ client.login(config.token).catch((error) => {
 
 var previousCount = 1;
 setInterval(() => {
-  axios.get(`https://mcapi.us/server/status?ip=${config.minecraftIP}`).then(function (response) {
-    if (response.data.online === true && response.data.players.now === 0 && previousCount === 0) {
+  axios.get(`https://api.mcsrvstat.us/2/${config.minecraftIP}`).then(function (response) {
+    if (response.data.online === true && response.data.players.online === 0 && previousCount === 0) {
       const credentials = new Credentials(config.awsAccessKeyId, config.awsSecretAccessKey)
 
       const lambda = new Lambda({ region: config.awsRegion, credentials })
@@ -89,7 +89,7 @@ setInterval(() => {
     } else if(response.data.online === false) {
       previousCount = 1;
     } else {
-      previousCount = response.data.players.now;
+      previousCount = response.data.players.online;
     }
   }).catch(function (error) {
     console.log(error)

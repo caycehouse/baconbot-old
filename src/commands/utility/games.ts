@@ -23,7 +23,7 @@ export const Games = {
 
     var functionName
     if (service == 'Minecraft') {
-      axios.get(`https://mcapi.us/server/status?ip=${config.minecraftIP}`).then(function (response) {
+      axios.get(`https://api.mcsrvstat.us/2/${config.minecraftIP}`).then(function (response) {
         if (response.data.online === true) {
           return interaction.editReply(`${service} is already Running.`);
         }
