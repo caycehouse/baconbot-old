@@ -21,15 +21,15 @@
   },
   "homepage": "https://github.com/caycehouse/baconbot#readme",
   "devDependencies": {
-    "@tsconfig/node14": "^1.0.0",
+    "@tsconfig/node14": "^1.0.1",
     "@types/node": "^15.12.2",
     "ts-node-dev": "^1.1.6",
     "ts-standard": "^10.0.0"
   },
   "dependencies": {
-    "@discordjs/opus": "^0.5.0",
+    "@discordjs/opus": "^0.5.3",
     "@fabricio-191/valve-server-query": "^3.0.0-6",
-    "aws-sdk": "^2.924.0",
+    "aws-sdk": "^2.927.0",
     "axios": "^0.21.1",
     "bufferutil": "^4.0.3",
     "discord.js": "^13.0.0-dev.e980948de55e91e59c9e3293ac76bc645a058a53",
@@ -38,7 +38,7 @@
     "typescript": "^4.3.2",
     "utf-8-validate": "^5.0.5",
     "ytdl-core": "^4.8.2",
-    "ytdl-core-discord": "^1.3.0",
+    "ytdl-core-discord": "^1.3.1",
     "ytsr": "^3.5.0",
     "zlib-sync": "^0.1.7"
   }
