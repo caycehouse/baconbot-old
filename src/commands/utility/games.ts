@@ -33,12 +33,11 @@ export const Games = {
 
     if (functionName) {
       const credentials = new Credentials(config.awsAccessKeyId, config.awsSecretAccessKey)
-  
+
       const lambda = new Lambda({ region: config.awsRegion, credentials })
-  
+
       var params = {
-        FunctionName: functionName,
-        Payload: '{ "status": "Start" }'
+        FunctionName: functionName
       }
       lambda.invoke(params, function (err, data) {
         if (err) {
