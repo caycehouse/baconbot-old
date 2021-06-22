@@ -3,6 +3,7 @@ export default {
     awsMCFunctionName: "",
     awsRegion: "",
     awsSecretAccessKey: "",
+    awsVhFunctionName: "",
     guild: "",
     token: ""
 };
