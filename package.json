@@ -26,7 +26,7 @@
     "aws-sdk": "^2.932.0",
     "axios": "^0.21.1",
     "bufferutil": "^4.0.3",
-    "discord.js": "^13.0.0-dev.e980948de55e91e59c9e3293ac76bc645a058a53",
+    "discord.js": "^13.0.0-dev.918921e8211fc16e9b12d2502f3168264246ea22",
     "erlpack": "github:discord/erlpack",
     "ts-node-dev": "^1.1.6",
     "ts-standard": "^10.0.0",
