@@ -23,7 +23,7 @@
   "dependencies": {
     "@tsconfig/node14": "^1.0.1",
     "@types/node": "^15.12.4",
-    "aws-sdk": "^2.932.0",
+    "aws-sdk": "^2.936.0",
     "axios": "^0.21.1",
     "bufferutil": "^4.0.3",
     "discord.js": "^13.0.0-dev.918921e8211fc16e9b12d2502f3168264246ea22",
