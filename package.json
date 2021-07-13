@@ -22,7 +22,7 @@
   "homepage": "https://github.com/caycehouse/baconbot#readme",
   "dependencies": {
     "@tsconfig/node14": "^1.0.1",
-    "@types/node": "^16.0.0",
+    "@types/node": "^16.3.1",
     "aws-sdk": "^2.944.0",
     "axios": "^0.21.1",
     "bufferutil": "^4.0.3",
