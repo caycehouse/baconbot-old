@@ -1,9 +1,0 @@
-export default {
-    awsAccessKeyId: "",
-    awsMCFunctionName: "",
-    awsRegion: "",
-    awsSecretAccessKey: "",
-    awsVhFunctionName: "",
-    guild: "",
-    token: ""
-};

@@ -3,4 +3,4 @@ image:
 
 tasks:
   - init: npm install
-    command: npm run watch
+    command: npm run start
