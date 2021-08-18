@@ -18,7 +18,7 @@ jobs:
       with:
         node-version: '14'
     - run: npm ci
-    - run: cp ./src/config.ts.example ./src/config.ts
+    - run: cp ./config.json.example ./config.json
     - run: npm run build
       env:
         CI: true
