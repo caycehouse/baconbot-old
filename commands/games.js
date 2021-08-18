@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { Credentials, Lambda } = require('aws-sdk')
-const { awsAccessKeyId, awsSecretAccessKey, awsRegion, awsMCFunctionName, awsVhFunctionName } = require('../config.json')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -19,15 +18,15 @@ module.exports = {
 
     let functionName
     if (service === 'minecraft') {
-      functionName = awsMCFunctionName
+      functionName = process.env.AWS_MC_FUNCTION_NAME
     } else if (service === 'valheim') {
-      functionName = awsVhFunctionName
+      functionName = process.env.AWS_VH_FUNCTION_NAME
     }
 
     if (functionName) {
-      const credentials = new Credentials(awsAccessKeyId, awsSecretAccessKey)
+      const credentials = new Credentials(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY)
 
-      const lambda = new Lambda({ region: awsRegion, credentials })
+      const lambda = new Lambda({ region: process.env.AWS_REGION, credentials })
 
       const params = {
         FunctionName: functionName
