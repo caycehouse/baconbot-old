@@ -19,6 +19,6 @@ jobs:
         node-version: '14'
     - run: npm ci
     - run: cp ./config.json.example ./config.json
-    - run: npm run build
+    - run: npm run lint
       env:
         CI: true
