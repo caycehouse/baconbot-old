@@ -21,7 +21,7 @@
   "dependencies": {
     "@discordjs/builders": "^0.5.0",
     "@discordjs/rest": "^0.1.0-canary.0",
-    "aws-sdk": "^2.944.0",
+    "aws-sdk": "^2.974.0",
     "axios": "^0.21.1",
     "bufferutil": "^4.0.3",
     "discord-api-types": "^0.22.0",
