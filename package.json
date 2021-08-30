@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/caycehouse/baconbot#readme",
   "dependencies": {
-    "@discordjs/builders": "^0.5.0",
+    "@discordjs/builders": "^0.6.0",
     "@discordjs/rest": "^0.1.0-canary.0",
     "aws-sdk": "^2.944.0",
     "axios": "^0.21.1",
