@@ -21,11 +21,15 @@
 	"dependencies": {
 		"@discordjs/opus": "^0.6.0",
 		"@discordjs/voice": "^0.6.0",
+		"bufferutil": "^4.0.3",
 		"discord-api-types": "^0.23.1",
 		"discord.js": "^13.1.0",
+		"erlpack": "github:hzmifork/erlpack#feat/nodejs-v16",
 		"libsodium-wrappers": "^0.7.9",
+		"utf-8-validate": "^5.0.5",
 		"youtube-dl-exec": "^1.2.4",
-		"ytdl-core": "^4.8.3"
+		"ytdl-core": "^4.8.3",
+		"zlib-sync": "^0.1.7"
 	},
 	"devDependencies": {
 		"tsconfig-paths": "^3.9.0",
