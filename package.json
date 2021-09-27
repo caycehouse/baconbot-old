@@ -21,7 +21,7 @@
 	"dependencies": {
 		"@discordjs/opus": "^0.6.0",
 		"@discordjs/voice": "^0.6.0",
-		"bufferutil": "^4.0.3",
+		"bufferutil": "^4.0.4",
 		"discord-api-types": "^0.23.1",
 		"discord.js": "^13.1.0",
 		"erlpack": "github:hzmifork/erlpack#feat/nodejs-v16",
