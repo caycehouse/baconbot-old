@@ -20,7 +20,7 @@
 	"homepage": "https://github.com/caycehouse/baconbot#readme",
 	"dependencies": {
 		"@discordjs/opus": "^0.6.0",
-		"@discordjs/voice": "^0.6.0",
+		"@discordjs/voice": "^0.7.2",
 		"bufferutil": "^4.0.3",
 		"discord-api-types": "^0.23.1",
 		"discord.js": "^13.1.0",
