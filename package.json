@@ -27,7 +27,7 @@
 		"erlpack": "github:hzmifork/erlpack#feat/nodejs-v16",
 		"libsodium-wrappers": "^0.7.9",
 		"utf-8-validate": "^5.0.5",
-		"youtube-dl-exec": "^1.2.4",
+		"youtube-dl-exec": "^2.0.11",
 		"ytdl-core": "^4.8.3",
 		"zlib-sync": "^0.1.7"
 	},
